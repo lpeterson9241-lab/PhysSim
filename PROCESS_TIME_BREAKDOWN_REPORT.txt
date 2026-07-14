@@ -1,0 +1,42 @@
+OPIR PROCESS-TIME BREAKDOWN REPORT
+==================================
+
+Run:
+outputs\mtv\mt1024_grid7_offsets3_uniform_sensor_100x100_w16_20260714_021314
+
+Configuration:
+- Field-dependent PRFs: 29
+- Total bank filters: 87
+- Method: whitened_matched
+- Timing rows analyzed: 200
+
+Main finding:
+The pipeline is not dominated by CUDA matched filtering. The matched-filter bank
+accounts for only a small fraction of total worker time, while CFAR candidate
+generation dominates the sequence runtime. This means further speedups should
+target CFAR thresholding, local-maximum extraction, candidate sorting, and
+candidate pruning rather than the FFT/matched-filter bank itself.
+
+Mean stage times:
+- Worker total: 136.203 s (median 138.363 s, p90 142.859 s, 100.0% of worker time)
+- Matched filter + CFAR: 113.745 s (median 115.616 s, p90 119.275 s, 83.5% of worker time)
+- CUDA matched-filter bank: 3.701 s (median 3.410 s, p90 4.070 s, 2.7% of worker time)
+- CFAR candidate generation: 109.074 s (median 111.073 s, p90 113.541 s, 80.1% of worker time)
+- Tile merge and caps: 0.743 s (median 0.737 s, p90 0.816 s, 0.5% of worker time)
+
+Candidate-cap behavior:
+- Sequences analyzed: 200
+- Sequences hitting global cap: 93
+- Global-cap sequence rate: 46.5%
+- Mean candidates before global cap: 4796.3
+- Mean candidates after global cap: 4754.8
+
+Interpretation:
+1. CUDA execution is functioning and is already efficient relative to the rest
+   of the pipeline.
+2. CFAR candidate generation is the principal process-time bottleneck.
+3. The global candidate cap is frequently active, so candidate saturation can
+   affect both runtime and target retention.
+4. The next implementation priority is a CUDA/vectorized CFAR and peak-extraction
+   path, followed by earlier candidate suppression and more selective tile-level
+   pruning.

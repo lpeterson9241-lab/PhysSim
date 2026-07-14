@@ -1,0 +1,32 @@
+OPIR BACKGROUND FIGURE-OF-MERIT COMPARISON
+===========================================
+
+Source:
+The 20-case PRF-type/centroid-offset/background sweep. This report compares the
+recommended B_grid7_offsets3 bank across the five tested backgrounds so that the
+background is the primary changing variable.
+
+Recommended bank:
+- Approximately 29 field-dependent PRF types
+- Three horizontal centroid offsets
+- Approximately 87 total filters
+
+Background results:
+- cloud_front_sharp: sequence Pd=0.333, target Pd=0.125, PFA=0.083, median localization error=1.025 px, truth-frame coverage=0.285, mean runtime=122.66 s
+- full_overcast: sequence Pd=0.167, target Pd=0.083, PFA=0.000, median localization error=1.129 px, truth-frame coverage=0.181, mean runtime=124.83 s
+- mixed_clouds: sequence Pd=0.167, target Pd=0.125, PFA=0.000, median localization error=1.163 px, truth-frame coverage=0.208, mean runtime=124.95 s
+- sparse_clear: sequence Pd=0.250, target Pd=0.125, PFA=0.000, median localization error=2.744 px, truth-frame coverage=0.233, mean runtime=128.77 s
+- uniform_sensor: sequence Pd=0.250, target Pd=0.125, PFA=0.000, median localization error=1.553 px, truth-frame coverage=0.240, mean runtime=119.54 s
+
+Key conclusions:
+- Highest target-level Pd: cloud_front_sharp (0.125)
+- Highest sequence Pd: cloud_front_sharp (0.333)
+- Lowest target-level Pd: full_overcast (0.083)
+- Runtime varied little across backgrounds, indicating that scene complexity did
+  not substantially change end-to-end runtime in this small sweep.
+- Mixed clouds and sparse clear produced the strongest target recovery for the
+  recommended bank.
+- Cloud-front and overcast scenes remained difficult because abrupt or broad
+  structured clutter competes with the target-like spatial responses.
+- The 12-noise-sequence cases only resolve nonzero PFA in increments of 0.0833,
+  so these results are screening evidence rather than final low-PFA validation.
